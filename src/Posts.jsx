@@ -2,15 +2,18 @@ import { useState } from "react";
 
 import { fetchPosts, deletePost, updatePost } from "./api";
 import { PostDetail } from "./PostDetail";
+import useFetchQuery from "./useFetchQuery";
 const maxPostPage = 10;
 
 export function Posts() {
   const [currentPage, setCurrentPage] = useState(0);
   const [selectedPost, setSelectedPost] = useState(null);
 
-  // replace with useQuery
-  const data = [];
+  const { data, error, isPending } = useFetchQuery();
 
+  if (isPending) return <div>Loading...</div>;
+  if (error) return <div>Error: {error.message}</div>;
+  console.log(data);
   return (
     <>
       <ul>

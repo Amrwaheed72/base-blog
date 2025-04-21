@@ -1,10 +1,13 @@
-import { fetchComments } from "./api";
 import "./PostDetail.css";
-
+import useFetchComments from "./useFetchComments";
 export function PostDetail({ post }) {
   // replace with useQuery
-  const data = [];
-
+  const { id } = post;
+  const { data, isPending, error } = useFetchComments(id);
+  if (isPending) return <div>Loading...</div>;
+  if (error) return <div>Error: {error.message}</div>;
+  console.log(data);
+  
   return (
     <>
       <h3 style={{ color: "blue" }}>{post.title}</h3>
