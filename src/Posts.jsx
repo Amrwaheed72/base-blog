@@ -3,6 +3,7 @@ import { useState } from "react";
 import { PostDetail } from "./PostDetail";
 import useFetchPosts from "./useFetchPosts";
 import useDeletePost from "./useDeletePost";
+import useUpdatePost from "./useUpdatePost";
 const maxPostPage = 10;
 
 export function Posts() {
@@ -11,6 +12,7 @@ export function Posts() {
 
   const { data, error, isPending } = useFetchPosts(currentPage);
   const { mutate, isSuccess, reset } = useDeletePost();
+  const { update, isUpdated, resetUpdate } = useUpdatePost();
   const handlePreviousPage = () => {
     if (currentPage > 1) {
       setCurrentPage((prev) => prev - 1);
@@ -33,6 +35,7 @@ export function Posts() {
             className="post-title"
             onClick={() => {
               reset();
+              resetUpdate()
               setSelectedPost(post);
             }}
           >
@@ -50,7 +53,9 @@ export function Posts() {
         </button>
       </div>
       <hr />
-      {selectedPost && <PostDetail post={selectedPost} mutate={mutate} isSuccess={isSuccess} />}
+      {selectedPost && (
+        <PostDetail post={selectedPost} mutate={mutate} isSuccess={isSuccess} update={update} isUpdated={isUpdated} />
+      )}
     </>
   );
 }
