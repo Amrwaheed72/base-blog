@@ -1,19 +1,27 @@
 import { useState } from "react";
 
-import { fetchPosts, deletePost, updatePost } from "./api";
 import { PostDetail } from "./PostDetail";
-import useFetchQuery from "./useFetchQuery";
+import useFetchPosts from "./useFetchPosts";
 const maxPostPage = 10;
 
 export function Posts() {
-  const [currentPage, setCurrentPage] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
   const [selectedPost, setSelectedPost] = useState(null);
 
-  const { data, error, isPending } = useFetchQuery();
+  const { data, error, isPending } = useFetchPosts(currentPage);
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage((prev) => prev - 1);
+    }
+  };
 
+  const handleNextPage = () => {
+    if (currentPage < maxPostPage) {
+      setCurrentPage((prev) => prev + 1);
+    }
+  };
   if (isPending) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
-  console.log(data);
   return (
     <>
       <ul>
@@ -28,11 +36,11 @@ export function Posts() {
         ))}
       </ul>
       <div className="pages">
-        <button disabled onClick={() => {}}>
+        <button disabled={currentPage === 1} onClick={handlePreviousPage}>
           Previous page
         </button>
-        <span>Page {currentPage + 1}</span>
-        <button disabled onClick={() => {}}>
+        <span>Page {currentPage}</span>
+        <button disabled={currentPage === 10} onClick={handleNextPage}>
           Next page
         </button>
       </div>

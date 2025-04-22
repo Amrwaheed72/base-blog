@@ -7,7 +7,7 @@ export function PostDetail({ post }) {
   if (isPending) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
   console.log(data);
-  
+
   return (
     <>
       <h3 style={{ color: "blue" }}>{post.title}</h3>
